@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="product">
+
+   <insert id="create">
+      insert into jeil_product (product_category, product_title, product_writer, product_content, product_picture)
+      values (#{product_category}, #{product_title}, #{product_writer}, #{product_content}, #{product_picture})
+   </insert>
+   
+   <select id="listAll" resultType="product">
+   	select
+   		product_no, product_category, product_title, product_writer, product_content,
+  	 	product_picture, product_dt
+  	from jeil_product
+  	where product_category = #{product_category}
+  	order by product_dt DESC
+   </select>
+   
+    <select id="read" resultType="product">
+   	select
+   		product_no, product_category, product_title, product_writer, product_content,
+  	 	product_picture, product_dt
+  	from jeil_product
+  	where product_no = #{product_no}
+   </select>
+   
+    <update id="modify">
+   		update jeil_product set
+	   		product_category = #{product_category},
+	   		product_title = #{product_title},
+			product_content = #{product_content},
+			product_picture = #{product_picture},
+			product_dt = curtime()
+   		where product_no = #{product_no}
+   </update>
+   
+   <delete id="delete">
+   		delete from jeil_product
+   		where product_no = #{product_no}
+   </delete>
+</mapper>

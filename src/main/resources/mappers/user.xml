@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="user">
+	<!-- BNO,TITLE,CONTENT,WRITER,REGDATE,VIEWCNT -->
+	<insert id="create">
+		insert into jeil_user (user_id ,user_name, user_pass, user_email)
+		values (#{user_id}, #{user_name}, #{user_pass}, #{user_email})
+	</insert>
+	<select id="login" resultType="user">
+		select
+			user_id, user_name, user_pass, user_email
+		from jeil_user
+		where user_id=#{user_id} and user_pass=#{user_pass}
+	</select>
+	<select id="read" resultType="user">
+		select
+			user_id, user_name, user_pass, user_email
+		from jeil_user
+		where user_id = #{user_id}
+	</select>
+	<select id="check_id" resultType="String" parameterType="String">
+		select
+			user_id
+		from jeil_user
+		where user_id = #{user_id}
+	</select>
+	<update id="modify">
+		update jeil_user set
+			user_id=#{user_id}, user_name = #{user_name}, user_pass=#{user_pass},
+		user_email=#{user_email}
+		where user_id =#{user_id}
+	</update>
+
+
+	<delete id="delete">
+		delete from jeil_user
+		where user_id = #{user_id}
+	</delete>
+	
+	<!-- 회원탈퇴하면 게시글이랑 댓글 전부 삭제해버림 -->
+	<delete id="bid_delete">
+		delete 
+			jeil_board, jeil_reply
+		from jeil_reply join jeil_board on jeil_reply.replyer = jeil_board.board_id
+		where jeil_board.board_id = #{board_id}
+		<!-- and jeil_reply.replyer = #{board_id} -->
+	</delete>
+	
+	<select id="findid" resultType="String">
+		select user_id from jeil_user
+		where user_name = #{user_name} and user_email =#{user_email}
+	</select>
+	<select id="findpw" resultType="String">
+		select user_pass from jeil_user
+		where user_id = #{user_id} and user_email = #{user_email}
+	</select>
+	
+</mapper>

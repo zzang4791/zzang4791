@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.jeil.domain.InquiryVO" alias="inquiry" />
+		<typeAlias type="com.jeil.domain.UserVO" alias="user" />
+		<typeAlias type="com.jeil.domain.ProductVO" alias="product" />
+		<typeAlias type="com.jeil.dto.LoginDTO" alias="login" />
+		<typeAlias type="com.jeil.domain.BoardVO" alias="board" />
+		<typeAlias type="com.jeil.domain.ReplyVO" alias="reply" />
+	</typeAliases>
+</configuration>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="board">
+
+   <select id="listAll" resultType="board">
+   select 
+   		board_no, board_id, board_name, board_category, board_title, board_date
+   from jeil_board
+   order by board_no DESC
+   </select>
+   
+   <insert id="create">
+   insert into jeil_board
+   		(board_id, board_name, board_category, board_title, board_content )
+   values
+   		(#{board_id}, #{board_name}, #{board_category}, #{board_title}, #{board_content})
+   </insert>
+   
+   <select id="read" resultType="board">
+   select
+	   board_no,  board_id, board_name, board_category,
+	   board_title, board_content, board_date, board_update, board_file
+   from jeil_board
+   where board_no = #{board_no}
+   </select>
+   
+   <update id="modify">
+   		update jeil_board set
+	   		board_category = #{board_category},
+	   		board_title = #{board_title},
+	   		board_content = #{board_content}
+   		where board_no = #{board_no}
+   </update>
+   
+   <delete id="delete">
+   		delete from jeil_board
+   		where board_no = #{board_no}
+   </delete>
+   
+
+	<select id="getBoardListCount" resultType="int" parameterType="com.jeil.domain.BoardVO" >
+	    SELECT COUNT(*)  FROM jeil_board WHERE 1=1  
+	        <if test="searchFiled != null and searchFiled != ''">
+	            AND ${searchFiled} LIKE CONCAT('%',#{searchValue},'%')
+	        </if>
+	</select>
+	
+	<select id="getBoardList" resultType="com.jeil.domain.BoardVO" parameterType="com.jeil.domain.BoardVO">
+	select
+			a.rnum, a.board_no, a.board_id, a.board_name, a.board_category, a.board_title, a.board_content,
+			a.board_date, a.board_update, a.board_file
+		from
+			(
+				select @rownum:=@rownum+1 AS rnum, s.*
+				from
+					(
+						select board_no, board_id, board_name, board_category, board_title, board_content,
+						board_date, board_update, board_file
+						from jeil_board,   (SELECT @ROWNUM := 0) R
+						where 1=1
+						<if test="searchFiled != null and searchFiled != ''">
+               			AND ${searchFiled} LIKE CONCAT('%',#{searchValue},'%')
+           				</if>
+						order by board_no desc
+					)s
+			)a
+	WHERE rnum BETWEEN #{startRowNo} AND #{endRowNo}
+	</select>
+</mapper>
+
